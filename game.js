@@ -73,15 +73,16 @@ class Game {
         const jumpButton = document.getElementById('jumpButton');
         const controlsToggle = document.getElementById('controlsToggle');
         const touchControlsWrapper = document.getElementById('touchControls');
-        
-        // Prevent default touch behaviors
-        document.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-        
-        document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
+
+        // Prevent default touch behaviors ONLY on the game canvas and control wrapper,
+        // so we don't block touches on other UI like the desktop toggle button.
+        const preventTouchDefault = (el) => {
+            if (!el) return;
+            el.addEventListener('touchstart', (e) => { e.preventDefault(); }, { passive: false });
+            el.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
+        };
+        preventTouchDefault(this.canvas);
+        preventTouchDefault(touchControlsWrapper);
         
         // Left button
         if (leftButton) {
@@ -219,12 +220,17 @@ class Game {
             };
             applyDesktopVisibility();
 
-            controlsToggle.addEventListener('click', () => {
-                if (window.innerWidth < 769) return; // No-op on mobile
+            const toggleControls = () => {
+                if (window.innerWidth < 769) return; // No-op on mobile layout
                 const visible = touchControlsWrapper.classList.toggle('desktop-visible');
                 controlsToggle.setAttribute('aria-pressed', visible ? 'true' : 'false');
                 controlsToggle.textContent = visible ? 'Hide Controls' : 'Show Controls';
-            });
+            };
+
+            // Enable click, pointer, and touch interactions for the toggle button
+            controlsToggle.addEventListener('click', (e) => { e.preventDefault(); toggleControls(); });
+            controlsToggle.addEventListener('pointerdown', (e) => { e.preventDefault(); toggleControls(); });
+            controlsToggle.addEventListener('touchstart', (e) => { e.preventDefault(); toggleControls(); }, { passive: false });
 
             window.addEventListener('resize', applyDesktopVisibility);
             window.addEventListener('orientationchange', applyDesktopVisibility);
