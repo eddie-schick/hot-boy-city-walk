@@ -272,6 +272,28 @@
                 transform: scale(0.98);
             }
         }
+
+        /* Touch devices in landscape: always place controls below the canvas */
+        @media (orientation: landscape) and (pointer: coarse) {
+            #gameContainer {
+                height: calc(100vh - var(--controls-height));
+                height: calc(100svh - var(--controls-height));
+            }
+            #touchControls {
+                display: block;
+                position: static;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                max-width: none;
+                z-index: 100;
+                padding: 10px 16px;
+            }
+            #controlsToggle { display: none; }
+            #controls { display: none; }
+            #gameInfo { bottom: 16px; }
+        }
     </style>
 </head>
 <body>
