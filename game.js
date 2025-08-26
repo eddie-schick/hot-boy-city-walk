@@ -227,10 +227,23 @@ class Game {
                 controlsToggle.textContent = visible ? 'Hide Controls' : 'Show Controls';
             };
 
-            // Enable click, pointer, and touch interactions for the toggle button
-            controlsToggle.addEventListener('click', (e) => { e.preventDefault(); toggleControls(); });
-            controlsToggle.addEventListener('pointerdown', (e) => { e.preventDefault(); toggleControls(); });
-            controlsToggle.addEventListener('touchstart', (e) => { e.preventDefault(); toggleControls(); }, { passive: false });
+            // Unified interaction handler to avoid duplicate toggles on mobile (touch + click)
+            let toggleLock = false;
+            const onTogglePress = (e) => {
+                e.preventDefault();
+                if (typeof e.stopPropagation === 'function') e.stopPropagation();
+                if (toggleLock) return;
+                toggleLock = true;
+                toggleControls();
+                // Release lock on next tick
+                setTimeout(() => { toggleLock = false; }, 0);
+            };
+            if (window.PointerEvent) {
+                controlsToggle.addEventListener('pointerup', onTogglePress, { passive: false });
+            } else {
+                controlsToggle.addEventListener('touchstart', onTogglePress, { passive: false });
+                controlsToggle.addEventListener('click', onTogglePress);
+            }
 
             window.addEventListener('resize', applyDesktopVisibility);
             window.addEventListener('orientationchange', applyDesktopVisibility);
