@@ -259,11 +259,12 @@ class Game {
             const touchControlsWrapper = document.getElementById('touchControls');
             
             const isMobile = window.innerWidth <= 768;
+            const isLandscape = isMobile && window.matchMedia && window.matchMedia('(orientation: landscape)').matches;
             const availableWidth = window.innerWidth;
             let availableHeight = window.innerHeight;
             
-            if (isMobile) {
-                // Reserve space for controls area below the canvas
+            if (isLandscape) {
+                // Reserve space for controls area below the canvas only in landscape
                 const controlsStyles = getComputedStyle(document.documentElement);
                 const controlsHeightVar = controlsStyles.getPropertyValue('--controls-height').trim();
                 // Parse e.g., "140px"

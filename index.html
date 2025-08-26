@@ -164,14 +164,33 @@
             gap: 20px;
         }
         
-        /* Mobile Responsive */
+        /* Mobile base */
         @media (max-width: 768px) {
+            #controlsToggle { display: none; }
+            #controls { display: none; }
+        }
+
+        /* Mobile Portrait: overlay controls at bottom (original behavior) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            #touchControls {
+                display: block;
+                position: fixed;
+                bottom: calc(env(safe-area-inset-bottom) + 20px);
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 400px;
+                z-index: 1000;
+            }
+            #gameCanvas { height: 100vh; height: 100svh; }
+            #gameInfo { bottom: 120px; }
+        }
+
+        /* Mobile Landscape: place controls below canvas with reserved space */
+        @media (max-width: 768px) and (orientation: landscape) {
             #gameContainer {
                 height: calc(100vh - var(--controls-height));
                 height: calc(100svh - var(--controls-height));
-            }
-            #controlsToggle {
-                display: none; /* Hide toggle on mobile */
             }
             #touchControls {
                 display: block;
@@ -184,19 +203,7 @@
                 z-index: 100;
                 padding: 10px 16px;
             }
-            
-            #controls {
-                display: none;
-            }
-            
-            #gameCanvas {
-                height: 100vh;
-                height: 100svh;
-            }
-            
-            #gameInfo {
-                bottom: 16px;
-            }
+            #gameInfo { bottom: 16px; }
         }
         
         @media (max-width: 480px) {
