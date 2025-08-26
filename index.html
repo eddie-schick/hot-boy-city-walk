@@ -275,9 +275,11 @@
 
         /* Touch devices in landscape: always place controls below the canvas */
         @media (orientation: landscape) and (pointer: coarse) {
+            :root { --controls-height: 110px; }
             #gameContainer {
                 height: calc(100vh - var(--controls-height));
                 height: calc(100svh - var(--controls-height));
+                justify-content: flex-start;
             }
             #touchControls {
                 display: block;
@@ -288,11 +290,30 @@
                 width: 100%;
                 max-width: none;
                 z-index: 100;
-                padding: 10px 16px;
+                padding: 6px 12px;
             }
             #controlsToggle { display: none; }
             #controls { display: none; }
-            #gameInfo { bottom: 16px; }
+            #gameInfo { bottom: 12px; font-size: clamp(10px, 2vw, 14px); }
+
+            /* Smaller title to avoid covering gameplay */
+            #gameTitle {
+                top: 8px;
+                font-size: clamp(14px, 2.8vw, 20px);
+            }
+
+            /* Compact controls */
+            .touch-button {
+                width: 52px;
+                height: 52px;
+                font-size: 18px;
+            }
+            #jumpButton {
+                width: 68px;
+                height: 68px;
+                font-size: 20px;
+            }
+            .movement-controls { gap: 14px; }
         }
     </style>
 </head>
