@@ -256,30 +256,28 @@ class Game {
     setupCanvasScaling() {
         const resizeCanvas = () => {
             const canvas = this.canvas;
+            const touchControlsWrapper = document.getElementById('touchControls');
             
-            if (window.innerWidth <= 768) {
-                // Mobile scaling - full height, controls overlay the canvas
-                const availableWidth = window.innerWidth;
-                const availableHeight = window.innerHeight;
-                
-                const scaleX = availableWidth / 800;
-                const scaleY = availableHeight / 400;
-                const scale = Math.min(scaleX, scaleY);
-                
-                canvas.style.width = (800 * scale) + 'px';
-                canvas.style.height = (400 * scale) + 'px';
-            } else {
-                // Desktop - full screen
-                const availableWidth = window.innerWidth;
-                const availableHeight = window.innerHeight;
-                
-                const scaleX = availableWidth / 800;
-                const scaleY = availableHeight / 400;
-                const scale = Math.min(scaleX, scaleY);
-                
-                canvas.style.width = (800 * scale) + 'px';
-                canvas.style.height = (400 * scale) + 'px';
+            const isMobile = window.innerWidth <= 768;
+            const availableWidth = window.innerWidth;
+            let availableHeight = window.innerHeight;
+            
+            if (isMobile) {
+                // Reserve space for controls area below the canvas
+                const controlsStyles = getComputedStyle(document.documentElement);
+                const controlsHeightVar = controlsStyles.getPropertyValue('--controls-height').trim();
+                // Parse e.g., "140px"
+                const controlsHeight = controlsHeightVar.endsWith('px') ? parseFloat(controlsHeightVar) : 140;
+                // If controls are displayed below, reduce available canvas height
+                availableHeight = Math.max(200, availableHeight - controlsHeight);
             }
+            
+            const scaleX = availableWidth / 800;
+            const scaleY = availableHeight / 400;
+            const scale = Math.min(scaleX, scaleY);
+            
+            canvas.style.width = (800 * scale) + 'px';
+            canvas.style.height = (400 * scale) + 'px';
         };
         
         window.addEventListener('resize', resizeCanvas);

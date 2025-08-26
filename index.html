@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Hot Boy City Walks: The Adventures of Koda</title>
     <style>
+        :root {
+            --controls-height: 140px;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -163,11 +166,23 @@
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            #gameContainer {
+                height: calc(100vh - var(--controls-height));
+                height: calc(100svh - var(--controls-height));
+            }
             #controlsToggle {
                 display: none; /* Hide toggle on mobile */
             }
             #touchControls {
                 display: block;
+                position: static;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                max-width: none;
+                z-index: 100;
+                padding: 10px 16px;
             }
             
             #controls {
@@ -180,7 +195,7 @@
             }
             
             #gameInfo {
-                bottom: 120px; /* Move above touch controls */
+                bottom: 16px;
             }
         }
         
